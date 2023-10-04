@@ -72,6 +72,10 @@ class EnsureFrontendRequestsAreStateful
      */
     public static function fromFrontend($request)
     {
+        if ($request->bearerToken() && Auth::guard('sanctum')->user()) {
+            return false;
+        }
+
         $domain = $request->headers->get('referer') ?: $request->headers->get('origin');
 
         if (is_null($domain)) {
